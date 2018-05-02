@@ -24,6 +24,7 @@ class psvrt(feeders.Feeder):
         self.item_size = item_size
         if len(item_size) == 2:
             self.item_size += [self.raw_input_size[2]]
+
         self.box_extent = box_extent
         self.num_items = num_items
         self.num_item_pixel_values = num_item_pixel_values
@@ -63,6 +64,7 @@ class psvrt(feeders.Feeder):
         target_output = np.zeros(dtype=np.float32, shape=(self.batch_size, 1, 1, 2))
         if label_batch is None:
             label_batch = np.random.randint(low=0, high=2, size=(self.batch_size))
+            # print(label_batch)
         elif label_batch.shape[0] != (self.batch_size):
             raise ValueError('label_batch is not correctly batch sized.')
 
@@ -77,8 +79,13 @@ class psvrt(feeders.Feeder):
                 # sample positions
                 positions_list, SR_label = self.sample_positions(SR_label=label_batch[iimage] if (self.problem_type == 'SR') else None,
                                                        SR_portion=self.SR_portion, SR_type = self.SR_type)
+
+                print(positions_list)
+                print(SR_label)
+                # exit(0)
             else:
                 positions_list, SR_label = self.position_sampler(**position_sampler_args)
+
             if self.problem_type == 'SR':
                 label_batch[iimage] = SR_label
 
@@ -86,8 +93,13 @@ class psvrt(feeders.Feeder):
             if self.item_sampler is None:
                 items_list, SD_label = self.sample_bitpatterns(SD_label=label_batch[iimage] if (self.problem_type == 'SD') else None,
                                                      SD_portion=self.SD_portion)
+
+                print('items_list:', items_list)
+                print('SD Label:', SD_label)
+                # exit(0)
             else:
                 items_list, SD_label = self.item_sampler(**item_sampler_args)
+
             if self.problem_type == 'SD':
                 label_batch[iimage] = SD_label
 	
@@ -105,7 +117,9 @@ class psvrt(feeders.Feeder):
             # render
             image = self.render(items_list, positions_list, label_batch[iimage], display=self.display)
             target_output[iimage, 0, 0, label_batch[iimage]] = 1
+            # print('target_output:', target_output)
             input_data[iimage, :, :, :] = image
+            # print('input_data:', input_data)
             iimage+=1
             if self.display:
                 print(target_output[iimage-1,0,0,:])
@@ -162,17 +176,30 @@ class psvrt(feeders.Feeder):
             while position_flag == 0:
                 position_flag = 1
                 if not self.easy:
-                    new_position =  [np.random.randint(low=0, high=self.box_extent[0] - (self.item_size[0] - 1)),
-                    np.random.randint(low=0, high=self.box_extent[1] - (self.item_size[1] - 1))]
+                    # new_position =  [np.random.randint(low=0, high=self.box_extent[0] - (self.item_size[0] - 1)),
+                    # np.random.randint(low=0, high=self.box_extent[1] - (self.item_size[1] - 1))]
+                    y = self.item_size[0] * pp
+                    new_position = [y, 0]
+
                 else:
                     new_position =  [np.random.randint(low=0, high=self.raw_input_size[0]/20),
                                      np.random.randint(low=0, high=self.raw_input_size[1]/20)]
+                    # print('new_position divided by 20:', new_position)
                     new_position[0] *= 20
                     new_position[1] *= 20
-                for old_position in positions_list:
-                    position_viability = utility.check_position_viability(new_position, old_position, SR_label, SR_portion, self.item_size, SR_type)
-                    position_flag *= position_viability
+                # for old_position in positions_list:
+                #     # print('positions list in the loop:',positions_list)
+                #     # print('old position:', old_position)
+                #     # print('new position:', new_position)
+                #     # print('SR Label:', SR_label)
+                #     # print('SR Portion:', SR_portion)
+                #     # print('Item Size:', self.item_size)
+                #     # print('SR Type:', SR_type)
+                #     position_viability = utility.check_position_viability(new_position, old_position, SR_label, SR_portion, self.item_size, SR_type)
+                #     position_flag *= position_viability
             positions_list.append(new_position)
+
+            # print('positions list:', positions_list)
         if SR_type == 'average_orientation' or SR_type == 'average_displacement':
             for pos_1 in positions_list:
                 for pos_2 in positions_list:
@@ -183,8 +210,12 @@ class psvrt(feeders.Feeder):
                     running_displacement += np.array([y,x])
                     running_orientation += np.arctan(y/x)
 
+            #         print('running displacement:',running_displacement)
+            #         print('running orientation inside:', running_orientation)
+            # print('running orientation outside:', running_orientation)
             running_displacement = running_displacement / self.num_items*(self.num_items - 1)
             running_orientation = running_orientation / self.num_items*(self.num_items - 1)
+            # print('running orientation division:', running_orientation)
             if SR_type == 'average_orientation':
                 if np.abs(running_orientation) >= np.pi/4:
                     new_label = 1
@@ -206,11 +237,16 @@ class psvrt(feeders.Feeder):
         if (SD_portion>=1) | (SD_portion<0):
             raise ValueError('0<=SD_portion<1')
 
-        base_item_sign_exponents = np.random.randint(low=0, high=2, size=self.item_size)     
+        # print('self.item_size:', self.item_size)
+        base_item_sign_exponents = np.random.randint(low=0, high=2, size=self.item_size)
+        # print("base_item_sign_exponents:", base_item_sign_exponents)
         base_item_values = np.random.randint(low=1, high=self.num_item_pixel_values + 1, size=self.item_size)
+        # print("base_item_values:", base_item_values)
         base_item = np.power(-1, base_item_sign_exponents) * base_item_values
+        # print("base_item:", base_item)
 
         items_list = [base_item.copy()]*self.num_items
+        # print("items_list:", items_list)
 
         if SD_label is None:
             SD_label = np.random.randint(low=0, high=2)
@@ -261,6 +297,8 @@ class psvrt(feeders.Feeder):
         else:
             raise ValueError('SD_label should be 0 or 1 or None')
 
+        # print("items_list:", items_list)
+        # print("SD Label:", SD_label)
         return items_list, SD_label
 
     def resample_pixel(self, x, force_different):
