@@ -1,13 +1,13 @@
 import psvrt
 import numpy as np
 import matplotlib.pyplot as plt
-raw_input_size = [100,100,1] # Size of whole image
-batch_size = 5
+raw_input_size = [8,4,1] # Size of whole image
+batch_size = 20
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
-		   'item_size': [3,3],
-		   'box_extent': [40,40],
+		   'item_size': [4,4],
+		   'box_extent': [60,60],
 		   'num_items': 2,
 		   'num_item_pixel_values': 1,
 		   'SD_portion': 0,
@@ -37,9 +37,9 @@ for img, lbl in zip(stimuli, labels_temp):
     img = np.squeeze(img[:,:,0])
 
     if int(lbl) == 1:
-        plt.imsave('./1/' + str(count) + '_1.png', img)
+        plt.imsave('./SD/1/' + str(count) + '_1.png', img)
     else:
-        plt.imsave('./0/' + str(count) + '_0.png', img)
+        plt.imsave('./SD/0/' + str(count) + '_0.png', img)
 
     count +=1
 
