@@ -80,8 +80,8 @@ class psvrt(feeders.Feeder):
                 positions_list, SR_label = self.sample_positions(SR_label=label_batch[iimage] if (self.problem_type == 'SR') else None,
                                                        SR_portion=self.SR_portion, SR_type = self.SR_type)
 
-                #print(positions_list)
-                #print(SR_label)
+                # print(positions_list)
+                # print(SR_label)
                 # exit(0)
             else:
                 positions_list, SR_label = self.position_sampler(**position_sampler_args)
@@ -93,17 +93,6 @@ class psvrt(feeders.Feeder):
             if self.item_sampler is None:
                 items_list, SD_label = self.sample_bitpatterns(SD_label=label_batch[iimage] if (self.problem_type == 'SD') else None,
                                                      SD_portion=self.SD_portion)
-
-<<<<<<< HEAD
-                #print('items_list:', items_list)
-                #print('SD Label:', SD_label)
-                # exit(0)
-=======
-                print('items_list 1:', items_list[0])
-                print('items_list 2:', items_list[1])
-                print('SD Label:', SD_label)
-                exit(0)
->>>>>>> 1e5fb5db8c98af186047159177d8239f28ca6b04
             else:
                 items_list, SD_label = self.item_sampler(**item_sampler_args)
 
@@ -121,6 +110,10 @@ class psvrt(feeders.Feeder):
                 if (overlaps > 0.) & self.perforate:
                     continue
                 self.tracker_mask = new_tracker_mask
+
+
+            # print('label_batch:', label_batch[iimage])
+
             # render
             image = self.render(items_list, positions_list, label_batch[iimage], display=self.display)
             target_output[iimage, 0, 0, label_batch[iimage]] = 1
@@ -129,9 +122,10 @@ class psvrt(feeders.Feeder):
             # print('input_data:', input_data)
             iimage+=1
             if self.display:
-                print(target_output[iimage-1,0,0,:])
+                # print(target_output[iimage-1,0,0,:])
                 positions_list_batch.append(positions_list)
-                items_list_batch.append(items_list)
+
+            items_list_batch.append(items_list)
 
         return input_data, target_output, positions_list_batch, items_list_batch
 
@@ -183,29 +177,25 @@ class psvrt(feeders.Feeder):
             while position_flag == 0:
                 position_flag = 1
                 if not self.easy:
-                    # new_position =  [np.random.randint(low=0, high=self.box_extent[0] - (self.item_size[0] - 1)),
-                    # np.random.randint(low=0, high=self.box_extent[1] - (self.item_size[1] - 1))]
-                    y = self.item_size[0] * pp
-                    new_position = [y, 0]
-
+                    new_position =  [np.random.randint(low=0, high=self.box_extent[0] - (self.item_size[0] - 1)),
+                    np.random.randint(low=0, high=self.box_extent[1] - (self.item_size[1] - 1))]
                 else:
                     new_position =  [np.random.randint(low=0, high=self.raw_input_size[0]/20),
                                      np.random.randint(low=0, high=self.raw_input_size[1]/20)]
                     # print('new_position divided by 20:', new_position)
                     new_position[0] *= 20
                     new_position[1] *= 20
-                # for old_position in positions_list:
-                #     # print('positions list in the loop:',positions_list)
-                #     # print('old position:', old_position)
-                #     # print('new position:', new_position)
-                #     # print('SR Label:', SR_label)
-                #     # print('SR Portion:', SR_portion)
-                #     # print('Item Size:', self.item_size)
-                #     # print('SR Type:', SR_type)
-                #     position_viability = utility.check_position_viability(new_position, old_position, SR_label, SR_portion, self.item_size, SR_type)
-                #     position_flag *= position_viability
+                for old_position in positions_list:
+                    # print('positions list in the loop:',positions_list)
+                    # print('old position:', old_position)
+                    # print('new position:', new_position)
+                    # print('SR Label:', SR_label)
+                    # print('SR Portion:', SR_portion)
+                    # print('Item Size:', self.item_size)
+                    # print('SR Type:', SR_type)
+                    position_viability = utility.check_position_viability(new_position, old_position, SR_label, SR_portion, self.item_size, SR_type)
+                    position_flag *= position_viability
             positions_list.append(new_position)
-
             # print('positions list:', positions_list)
         if SR_type == 'average_orientation' or SR_type == 'average_displacement':
             for pos_1 in positions_list:

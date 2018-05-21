@@ -2,7 +2,11 @@ import psvrt
 import numpy as np
 import matplotlib.pyplot as plt
 raw_input_size = [8,4,1] # Size of whole image
+<<<<<<< HEAD
 batch_size = 1000000
+=======
+batch_size = 10
+>>>>>>> 1e5fb5db8c98af186047159177d8239f28ca6b04
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
