@@ -94,9 +94,10 @@ class psvrt(feeders.Feeder):
                 items_list, SD_label = self.sample_bitpatterns(SD_label=label_batch[iimage] if (self.problem_type == 'SD') else None,
                                                      SD_portion=self.SD_portion)
 
-                print('items_list:', items_list)
+                print('items_list 1:', items_list[0])
+                print('items_list 2:', items_list[1])
                 print('SD Label:', SD_label)
-                # exit(0)
+                exit(0)
             else:
                 items_list, SD_label = self.item_sampler(**item_sampler_args)
 
