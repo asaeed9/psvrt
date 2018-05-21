@@ -80,8 +80,8 @@ class psvrt(feeders.Feeder):
                 positions_list, SR_label = self.sample_positions(SR_label=label_batch[iimage] if (self.problem_type == 'SR') else None,
                                                        SR_portion=self.SR_portion, SR_type = self.SR_type)
 
-                print(positions_list)
-                print(SR_label)
+                #print(positions_list)
+                #print(SR_label)
                 # exit(0)
             else:
                 positions_list, SR_label = self.position_sampler(**position_sampler_args)
@@ -94,8 +94,8 @@ class psvrt(feeders.Feeder):
                 items_list, SD_label = self.sample_bitpatterns(SD_label=label_batch[iimage] if (self.problem_type == 'SD') else None,
                                                      SD_portion=self.SD_portion)
 
-                print('items_list:', items_list)
-                print('SD Label:', SD_label)
+                #print('items_list:', items_list)
+                #print('SD Label:', SD_label)
                 # exit(0)
             else:
                 items_list, SD_label = self.item_sampler(**item_sampler_args)
