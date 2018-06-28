@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 raw_input_size = [60,60,1] # Size of whole image
-batch_size = 10
+batch_size = 4000
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
