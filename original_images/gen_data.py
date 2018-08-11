@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 import os
 import csv
 
-raw_input_size = [10,10,3] # Size of whole image
-batch_size = 30000
+raw_input_size = [4,4,3] # Size of whole image
+batch_size = 3
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
-		   'item_size': [3,3],
-		   'box_extent': [8,8],
+		   'item_size': [2,2],
+		   'box_extent': [4,4],
 		   'num_items': 1,
 		   'num_item_pixel_values': 1,
 		   'SD_portion': 0,
@@ -31,7 +31,7 @@ all_items = np.asarray(data[3])
 
 print('stimuli:', stimuli)
 # print('label positions: ', label_positions.shape)
-# print('all items', all_items.shape)
+print('all items', all_items)
 
 labels_temp = np.squeeze(labels[:, 0, 0, 0])
 
