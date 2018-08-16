@@ -29,13 +29,15 @@ labels = data[1] # Labels
 label_positions = data[2]
 all_items = np.asarray(data[3])
 
-print('stimuli:', stimuli)
+# print('stimuli:', stimuli)
 # print('label positions: ', label_positions.shape)
-print('all items', all_items)
+# print('all items', all_items)
 
 labels_temp = np.squeeze(labels[:, 0, 0, 0])
 
-print(len(stimuli), len(all_items), len(labels), len(label_positions))
+# print(len(stimuli), len(all_items), len(labels), len(label_positions))
+
+
 # if data_parameters['patch_coords'] == True:
 #     lbl_coords = open('label_coords.csv', 'w')
 # writer = csv.writer(lbl_coords)
@@ -45,8 +47,6 @@ for img, lbl,items in zip(stimuli, labels_temp, all_items):
     # print("I'm going to do something")
     # img = np.squeeze(img[:,:,0])
     # print('img shape:', img.shape)
-
-
 
     if not os.path.exists('./SD' + str(count)):
         os.makedirs('./SD/' + str(count))
@@ -59,9 +59,10 @@ for img, lbl,items in zip(stimuli, labels_temp, all_items):
     if data_parameters['mask'] == True:
         items = np.expand_dims(items, axis=0)
 
+    print(items.shape)
+
     for item in items:
-        # print('item:', item)
-        plt.imsave('./SD/' + str(count) + '/labels/' + str(item_count) + '_' + str(int(lbl)) + '.png', item)
+        plt.imsave('./SD/' + str(count) + '/labels/' + str(item_count) + '_' + str(int(lbl)) + '.png', np.squeeze(item[:,:,:]))
         item_count += 1
 
     # """Build a csv file which would have one line of label coordinates and size for every image"""
