@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import os
 import csv
 
-raw_input_size = [4,4,3] # Size of whole image
-batch_size = 3
+raw_input_size = [100,100,3] # Size of whole image
+batch_size = 50000
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
-		   'item_size': [2,2],
-		   'box_extent': [4,4],
-		   'num_items': 1,
+		   'item_size': [3,3],
+		   'box_extent': [60,60],
+		   'num_items': 4,
 		   'num_item_pixel_values': 1,
 		   'SD_portion': 0,
 		   'SR_portion': 1,
