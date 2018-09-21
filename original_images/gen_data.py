@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 import os
 import csv
 
-raw_input_size = [100,100,3] # Size of whole image
-batch_size = 50000
+raw_input_size = [5,5,3] # Size of whole image
+batch_size = 3
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
-		   'item_size': [3,3],
-		   'box_extent': [60,60],
-		   'num_items': 4,
+		   'item_size': [2,2],
+		   'box_extent': [5,5],
+		   'num_items': 2,
 		   'num_item_pixel_values': 1,
 		   'SD_portion': 0,
 		   'SR_portion': 1,
@@ -33,7 +33,7 @@ all_items = np.asarray(data[3])
 # print('label positions: ', label_positions.shape)
 # print('all items', all_items)
 
-labels_temp = np.squeeze(labels[:, 0, 0, 0])
+labels_temp = np.array(np.squeeze(labels[:, 0, 0, 0]), np.int64)
 
 # print(len(stimuli), len(all_items), len(labels), len(label_positions))
 
@@ -44,16 +44,14 @@ labels_temp = np.squeeze(labels[:, 0, 0, 0])
 
 count = 1
 for img, lbl,items in zip(stimuli, labels_temp, all_items):
-    # print("I'm going to do something")
-    # img = np.squeeze(img[:,:,0])
-    # print('img shape:', img.shape)
 
     if not os.path.exists('./SD' + str(count)):
         os.makedirs('./SD/' + str(count))
-        os.makedirs('./SD/' + str(count) + '/img')
-        os.makedirs('./SD/' + str(count) + '/labels')
+        os.makedirs('./SD/' + str(count) + '/' + str(lbl))
+        os.makedirs('./SD/' + str(count) + '/' + str(lbl) + '/img')
+        os.makedirs('./SD/' + str(count) + '/' + str(lbl) + '/labels')
 
-    plt.imsave('./SD/' + str(count) + '/img/img.png', img)
+    plt.imsave('./SD/' + str(count) + '/' + str(lbl) +  '/img/img.png', img)
     item_count = 1
 
     if data_parameters['mask'] == True:
@@ -62,7 +60,7 @@ for img, lbl,items in zip(stimuli, labels_temp, all_items):
     print(items.shape)
 
     for item in items:
-        plt.imsave('./SD/' + str(count) + '/labels/' + str(item_count) + '_' + str(int(lbl)) + '.png', np.squeeze(item[:,:,:]))
+        plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/' + str(item_count) + '_' + str(int(lbl)) + '.png', np.squeeze(item[:,:,:]))
         item_count += 1
 
     # """Build a csv file which would have one line of label coordinates and size for every image"""

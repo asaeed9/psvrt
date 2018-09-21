@@ -280,7 +280,7 @@ class psvrt(feeders.Feeder):
                     item_flat[order[i], 0, :] = self.resample_pixel(item_flat[order[i], 0, :], force_different=False)
 
         elif SD_label == 1:  # SAME
-            num_different = np.random.randint(low=0, high=self.num_items) # if need to generate more than 2 items, please subtract 1 from self.num_items
+            num_different = np.random.randint(low=0, high=self.num_items -1) # if need to generate more than 2 items, please subtract 1 from self.num_items
             for dd in range(num_different):
                 item = items_list[dd].copy()
                 item_flat = np.reshape(item, (-1, 1, self.item_size[2]))
