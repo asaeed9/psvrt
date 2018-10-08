@@ -4,18 +4,18 @@ import matplotlib.pyplot as plt
 import os
 import csv
 
-raw_input_size = [10,10,3] # Size of whole image
+raw_input_size = [6,6,3] # Size of whole image
 batch_size = 50000
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
 		   'item_size': [2,2],
-		   'box_extent': [10,10],
+		   'box_extent': [6,6],
 		   'num_items': 2,
 		   'num_item_pixel_values': 1,
 		   'SD_portion': 0,
 		   'SR_portion': 1,
-            'patch_coords': False, #This parameter is introduced to generate patch coordinates and size in a csv file.
+            'full_size': 2, #whether ground label should be a full-size masked image or concatenated patches from the original image. 0 = merged patches, 1 = masked image, 2 = both
 			'mask': True, #This parameter is introduced in order to generate label of the image as 1 where patch is and 0 else where.
 		   'display': False}
 
@@ -31,16 +31,9 @@ all_items = np.asarray(data[3])
 
 # print('stimuli:', stimuli)
 # print('label positions: ', label_positions.shape)
-# print('all items', all_items)
-
 labels_temp = np.array(np.squeeze(labels[:, 0, 0, 0]), np.int64)
 
 # print(len(stimuli), len(all_items), len(labels), len(label_positions))
-
-
-# if data_parameters['patch_coords'] == True:
-#     lbl_coords = open('label_coords.csv', 'w')
-# writer = csv.writer(lbl_coords)
 
 count = 1
 for img, lbl,items in zip(stimuli, labels_temp, all_items):
@@ -57,11 +50,17 @@ for img, lbl,items in zip(stimuli, labels_temp, all_items):
     if data_parameters['mask'] == True:
         items = np.expand_dims(items, axis=0)
 
-    print(items.shape)
+    if data_parameters['full_size'] == 1:
+        # for item in items:
+        # plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/' + str(item_count) + '_' + str(int(lbl)) + '.png', np.squeeze(item))
+        # item_count += 1
+        plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/mask.png',np.squeeze(items))
+    elif data_parameters['full_size'] == 0:
+        plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/merged_patch.png', np.squeeze(items))
+    else:
+        plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/mask.png', np.squeeze(items)[0])
+        plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/merged_patch.png', np.squeeze(items)[1])
 
-    for item in items:
-        plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/' + str(item_count) + '_' + str(int(lbl)) + '.png', np.squeeze(item[:,:,:]))
-        item_count += 1
 
     # """Build a csv file which would have one line of label coordinates and size for every image"""
     # if data_parameters['patch_coords'] == True:

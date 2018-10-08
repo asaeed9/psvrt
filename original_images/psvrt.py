@@ -20,7 +20,7 @@ class psvrt(feeders.Feeder):
                         problem_type, item_size, box_extent,
                         num_items=2, num_item_pixel_values=1, SD_portion=0, SR_portion=1, SR_type='average_orientation',
                         perforate_type=None, perforate_mask=None, perforate=False,
-                        position_sampler=None, item_sampler=None, mix_rules=False, patch_coords = False, mask = False,
+                        position_sampler=None, item_sampler=None, mix_rules=False, full_size = 2, mask = False,
                         display=False,
                         easy=False):
         self.problem_type = problem_type
@@ -39,7 +39,7 @@ class psvrt(feeders.Feeder):
         self.position_sampler = position_sampler
         self.item_sampler = item_sampler
         self.mix_rules = mix_rules
-        self.patch_coords = patch_coords
+        self.full_size = full_size
         self.mask = mask
         self.display = display
         self.easy = easy
@@ -104,6 +104,7 @@ class psvrt(feeders.Feeder):
             else:
                 items_list, SD_label = self.item_sampler(**item_sampler_args)
 
+
             if self.problem_type == 'SD':
                 label_batch[iimage] = SD_label
 
@@ -123,7 +124,7 @@ class psvrt(feeders.Feeder):
             # print('label_batch:', label_batch[iimage])
 
             # render
-            image, ground_label = self.render(items_list, positions_list, label_batch[iimage], display=self.display)
+            image, ground_label, ground_label_2 = self.render(items_list, positions_list, label_batch[iimage], display=self.display)
             target_output[iimage, 0, 0, label_batch[iimage]] = 1
             # print('target_output:', target_output)
             input_data[iimage, :, :, :] = image
@@ -133,7 +134,15 @@ class psvrt(feeders.Feeder):
                 # print(target_output[iimage-1,0,0,:])
                 positions_list_batch.append(positions_list)
 
-            items_list_batch.append(ground_label)
+            if self.full_size == 0:
+                items_list_batch.append(ground_label_2)
+            elif self.full_size == 1:
+                items_list_batch.append(ground_label)
+            else:
+                items_list_batch.append([ground_label, ground_label_2])
+
+        # print(np.array(items_list_batch))
+        # print(np.array(positions_list_batch).shape)
 
         return input_data, target_output, positions_list_batch, items_list_batch
 
@@ -150,19 +159,40 @@ class psvrt(feeders.Feeder):
             raise ValueError('Should provide the same number of hard-coded items and positions')
         # if (len(items_list)>2) | (len(positions_list)>2):
         #       raise ValueError('#items should not exceed 2 (not yet implemented)')
-
+        # print(items_list)
         mask = np.zeros(shape=(self.raw_input_size[0], self.raw_input_size[1]))
         image = np.zeros(shape=tuple(self.raw_input_size))
-        ground_label = np.zeros(shape=tuple(self.raw_input_size))
+        if self.full_size == 1 or self.full_size == 2:
+            ground_label = np.zeros(shape=tuple(self.raw_input_size))
 
         for i, (position, item) in enumerate(zip(positions_list, items_list)):
             square_size = items_list[i].shape
             image[position[0]:position[0] + square_size[0], position[1]:position[1] + square_size[1], :] = items_list[i].copy()
-            ground_label[position[0]:position[0] + square_size[0], position[1]:position[1] + square_size[1], :] = 1.
+            image[image == -1] = 0.
+            image[image == 1] = 255.
+
+            if self.full_size == 1 or self.full_size == 2:
+                ground_label[position[0]:position[0] + square_size[0], position[1]:position[1] + square_size[1], :] = 1.
 
             mask[position[0]:position[0] + square_size[0], position[1]:position[1] + square_size[1]] += 1
             if np.any(mask > 1):
                 raise ValueError('Spatially overlapping items found.')
+
+        if self.full_size == 0 or self.full_size == 2:
+            ground_label_2 = None
+            itms_list = np.array(items_list)
+            cat_item = itms_list[0:1]
+            for itm in itms_list[1:]:
+                cat_item = np.concatenate((np.squeeze(cat_item), np.squeeze(itm)), axis=0)
+
+            cat_item[cat_item == -1] = 0.
+            cat_item[cat_item == 1] = 255.
+
+            ground_label_2 = cat_item
+
+        # print('ground label')
+        # print(ground_label)
+
         if display:
             label = 'Horizontal' if SR_label == 0 else 'Vertical'
             plt.imshow(np.squeeze(image), interpolation='none')
@@ -171,7 +201,7 @@ class psvrt(feeders.Feeder):
             plt.show()
             plt.clf()
 
-        return image, ground_label
+        return image, ground_label, ground_label_2
 
     ############### SAMPLE
     def sample_positions(self, SR_label=None, SR_portion=1, SR_type='average_orientation'):
@@ -280,7 +310,12 @@ class psvrt(feeders.Feeder):
                     item_flat[order[i], 0, :] = self.resample_pixel(item_flat[order[i], 0, :], force_different=False)
 
         elif SD_label == 1:  # SAME
-            num_different = np.random.randint(low=0, high=self.num_items -1) # if need to generate more than 2 items, please subtract 1 from self.num_items
+
+            if (self.num_items == 1):
+                num_different = np.random.randint(low=0, high=self.num_items) # if need to generate more than 2 items, please subtract 1 from self.num_items
+            else:
+                num_different = np.random.randint(low=0, high=self.num_items - 1)
+
             for dd in range(num_different):
                 item = items_list[dd].copy()
                 item_flat = np.reshape(item, (-1, 1, self.item_size[2]))
