@@ -27,27 +27,20 @@
         <entry file="file://$PROJECT_DIR$/psvrt.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="529">
-              <caret line="184" column="37" lean-forward="true" selection-start-line="184" selection-start-column="37" selection-end-line="184" selection-end-column="37" />
+              <caret line="184" column="37" lean-forward="false" selection-start-line="184" selection-start-column="37" selection-end-line="184" selection-end-column="37" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="img.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/SD/15970/0/img/img.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="predicted_mask.png" pinned="false" current-in-tab="false">
+      <file leaf-file-name="predicted_mask.png" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SD/15970/0/img/predicted_mask.png">
           <provider selected="true" editor-type-id="images">
             <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="merged_patch.png" pinned="false" current-in-tab="true">
+      <file leaf-file-name="merged_patch.png" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SD/15970/0/labels/merged_patch.png">
           <provider selected="true" editor-type-id="images">
             <state />
@@ -297,16 +290,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/SD/8/labels/1_1.png" />
-    <entry file="file://$PROJECT_DIR$/SD/2/labels/2_0.png" />
-    <entry file="file://$PROJECT_DIR$/../../../Teradata_deliverables/WellsFargo/Workflow_Testing/teradata_graph_modularity.sql" />
-    <entry file="file://$PROJECT_DIR$/../../../Teradata_deliverables/WellsFargo/Workflow_Testing/graph_modularity.sql" />
-    <entry file="file://$PROJECT_DIR$/../../../Teradata_deliverables/WellsFargo/Workflow_Testing/aster_modularity.sql" />
-    <entry file="file://$PROJECT_DIR$/../../../Teradata_deliverables/WellsFargo/Workflow_Testing/aster_glm.sql" />
-    <entry file="file://$PROJECT_DIR$/SD/1/labels/2_1.png" />
-    <entry file="file://$PROJECT_DIR$/patch_extraction_II.py" />
-    <entry file="file://$PROJECT_DIR$/SD/1/labels/4_0.png" />
-    <entry file="file://$PROJECT_DIR$/SD/1/labels/3_0.png" />
     <entry file="file://$PROJECT_DIR$/SD/1/labels/2_0.png" />
     <entry file="file://$PROJECT_DIR$/SD/3/labels/1_1.png" />
     <entry file="file://$PROJECT_DIR$/SD/3/img/img.png" />
@@ -389,14 +372,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/psvrt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="184" column="37" lean-forward="true" selection-start-line="184" selection-start-column="37" selection-end-line="184" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SD/1984/0/labels/merged_patch.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -412,7 +387,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SD/15970/0/img/predicted_mask.png">
+    <entry file="file://$PROJECT_DIR$/SD/15970/0/labels/merged_patch.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
@@ -427,7 +402,95 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SD/15970/0/labels/merged_patch.png">
+    <entry file="file://$PROJECT_DIR$/../../Teradata_deliverables/Industrial_Methods/Apple/ahmad_scripts/ADS_gen.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Teradata_deliverables/Industrial_Methods/Apple/exponential_smoothing/expMvAvg_NR.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Teradata_deliverables/Industrial_Methods/Apple/MLR/data_prep_queries.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Teradata_deliverables/Industrial_Methods/Apple/MLR/regression_prep_scripts.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-422">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../StudioWorkspace/SQL/taf_ewma_apple_14sep2018.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/queries.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Teradata_deliverables/Industrial_Methods/Apple/ahmad_scripts/queries.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///private/var/folders/9l/gj54q2115tnc8dg_gkj_2gms6dy4mk/T/com.microsoft.Outlook/Outlook Temp/ADS_gen[1].sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="42" column="29" lean-forward="true" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///private/var/folders/9l/gj54q2115tnc8dg_gkj_2gms6dy4mk/T/com.microsoft.Outlook/Outlook Temp/queries[1].sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///private/var/folders/9l/gj54q2115tnc8dg_gkj_2gms6dy4mk/T/com.microsoft.Outlook/Outlook Temp/queries.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/psvrt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="529">
+          <caret line="184" column="37" lean-forward="false" selection-start-line="184" selection-start-column="37" selection-end-line="184" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SD/15970/0/img/predicted_mask.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
