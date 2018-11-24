@@ -16,10 +16,11 @@ Data Configurations/Paths
 """
 img_dir_patch="./SD/predicted_patches"
 img_dir_orig = "./SD/original_images"
-img_dir="../../original_images/SD"
+img_dir="../../original_images/SD_Train"
 model50_SD = 'SD/50kSD_Model.ckpt'
 model50_local_top_1 = 'SD/50k_local_top_Model.ckpt'
 model50_left_mask = 'SD/50k_left_mask.ckpt'
+model50_right_mask = 'SD/50k_right_mask.ckpt'
 
 img_type = "original"
 # img_type = "patch"
@@ -487,22 +488,22 @@ train_data, train_labels, img_type, img_keys = load_data(img_dir)
 session = tf.Session()
 init = tf.global_variables_initializer()
 session.run(init)
-train_labels_data = train_labels[:][:, 0]
+train_labels_data = train_labels[:][:50000, 1]
 #print(train_labels_data)
-train_orig_data = train_data
-img_type = img_type[:]
-img_keys = img_keys[:]
+train_orig_data = train_data[:50000]
+img_type = img_type[:50000]
+img_keys = img_keys[:50000]
 total_imgs = len(img_type)
-train_batch_size = 64
+train_batch_size = 128
 
 
 """Main"""
 if __name__ == "__main__":
 
     save_model = True
-    save_name = model50_SD
+    save_name = model50_right_mask
     restore_model=False
-    restore_name=model50_SD
+    restore_name=model50_right_mask
 
-    optimize(1,
-    save_model=True,save_name=model50_SD,restore_model=restore_model,restore_name=model50_SD)
+    optimize(30,
+    save_model=True,save_name=model50_right_mask,restore_model=restore_model,restore_name=model50_right_mask)

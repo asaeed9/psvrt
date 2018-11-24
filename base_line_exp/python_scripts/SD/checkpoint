@@ -1,2 +1,2 @@
-model_checkpoint_path: "50kSD_Model.ckpt"
-all_model_checkpoint_paths: "50kSD_Model.ckpt"
+model_checkpoint_path: "50k_right_mask.ckpt"
+all_model_checkpoint_paths: "50k_right_mask.ckpt"

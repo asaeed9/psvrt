@@ -5,7 +5,7 @@ import os
 import csv
 
 raw_input_size = [10,10,3] # Size of whole image
-batch_size = 100000
+batch_size = 10000
 
 # Change `problem_type` to SR for spatial relation labels
 data_parameters = {'problem_type': 'SD',
