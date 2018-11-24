@@ -218,6 +218,8 @@ class psvrt(feeders.Feeder):
                 if not self.easy:
                     new_position = [np.random.randint(low=0, high=self.box_extent[0] - (self.item_size[0] - 1)),
                                     np.random.randint(low=0, high=self.box_extent[1] - (self.item_size[1] - 1))]
+
+                    print(new_position)
                 else:
                     new_position = [np.random.randint(low=0, high=self.raw_input_size[0] / 20),
                                     np.random.randint(low=0, high=self.raw_input_size[1] / 20)]
