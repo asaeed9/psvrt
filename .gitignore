@@ -1,4 +1,9 @@
 /original_images/SD
+<<<<<<< HEAD
 /original_images/SD_train
+=======
+/original_images/SD_Train
+>>>>>>> 0836ecbb335e6467d6af369b9548511fc1b427b2
 /original_images/SD_test
 /base_line_exp/notebook/SD
+/base_line_exp/python_scripts/SD

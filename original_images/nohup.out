@@ -1,0 +1,10 @@
+/home/asaeed9/anaconda2/envs/py35/lib/python3.5/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Traceback (most recent call last):
+  File "gen_data.py", line 1, in <module>
+    import psvrt
+  File "/home/asaeed9/work/psvrt/original_images/psvrt.py", line 14, in <module>
+    import utility
+  File "/home/asaeed9/work/psvrt/original_images/utility.py", line 9, in <module>
+    import ipdb
+ImportError: No module named 'ipdb'
