@@ -14,32 +14,44 @@
       <file leaf-file-name="psvrt.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/psvrt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
+            <state relative-caret-position="3307">
               <caret line="221" column="39" lean-forward="false" selection-start-line="221" selection-start-column="39" selection-end-line="221" selection-end-column="39" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utility.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utility.py">
+      <file leaf-file-name="sep_patch_script.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sep_patch_script.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="327" column="69" lean-forward="false" selection-start-line="327" selection-start-column="69" selection-end-line="327" selection-end-column="69" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="29" />
               <folding>
-                <element signature="e#0#23#0" expanded="true" />
+                <element signature="e#0#38#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gen_data.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/gen_data.py">
+      <file leaf-file-name="model_accuracy.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model_accuracy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+            <state relative-caret-position="350">
+              <caret line="284" column="0" lean-forward="false" selection-start-line="283" selection-start-column="0" selection-end-line="284" selection-end-column="0" />
               <folding>
-                <element signature="e#0#12#0" expanded="true" />
+                <element signature="e#0#38#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utility.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/utility.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="229">
+              <caret line="327" column="26" lean-forward="false" selection-start-line="327" selection-start-column="26" selection-end-line="327" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -50,8 +62,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="SQL Script" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -72,6 +84,11 @@
       <find>sample_positions</find>
       <find>easy</find>
       <find>check_po</find>
+      <find>num_classes</find>
+      <find>dims</find>
+      <find>get_batch</find>
+      <find>rshp</find>
+      <find>img_shape</find>
       <find>SR_type</find>
     </findStrings>
     <replaceStrings>
@@ -83,7 +100,6 @@
       <list>
         <option value="$PROJECT_DIR$/patch_extraction_II.py" />
         <option value="$PROJECT_DIR$/patch_extraction.py" />
-        <option value="$PROJECT_DIR$/sep_patch_script.py" />
         <option value="/private/var/folders/9l/gj54q2115tnc8dg_gkj_2gms6dy4mk/T/com.microsoft.Outlook/Outlook Temp/pnorm.sql" />
         <option value="$USER_HOME$/Desktop/pnorm.sql" />
         <option value="$PROJECT_DIR$/zscore.sql" />
@@ -93,6 +109,8 @@
         <option value="$PROJECT_DIR$/vgrp295_init_calcs.sql" />
         <option value="$PROJECT_DIR$/psvrt.py" />
         <option value="$PROJECT_DIR$/utility.py" />
+        <option value="$PROJECT_DIR$/sep_patch_script.py" />
+        <option value="$PROJECT_DIR$/model_accuracy.py" />
         <option value="$PROJECT_DIR$/gen_data.py" />
       </list>
     </option>
@@ -255,16 +273,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="51" width="1680" height="912" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.47980416" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30232558" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17887668" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17887668" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Project Explorer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Job Explorer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -291,20 +310,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../Teradata_deliverables/Industrial_Methods/Apple/MLR/regression_prep_scripts.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-422">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../StudioWorkspace/SQL/taf_ewma_apple_14sep2018.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Desktop/queries.sql" />
     <entry file="file://$PROJECT_DIR$/../../Teradata_deliverables/Industrial_Methods/Apple/ahmad_scripts/queries.sql">
       <provider selected="true" editor-type-id="text-editor">
@@ -344,31 +349,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SD/1/1/labels/mask_patch_1.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SD/1/1/labels/mask_patch_2.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SD/1/1/labels/mask.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SD/3/1/labels/merged_patch.png">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sep_patch_script.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="264" column="16" lean-forward="false" selection-start-line="264" selection-start-column="16" selection-end-line="264" selection-end-column="16" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SD/15970/1/img/img.png">
@@ -440,11 +423,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SD/1/1/img/img.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SD/3/1/img/img.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -465,24 +443,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utility.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="327" column="69" lean-forward="false" selection-start-line="327" selection-start-column="69" selection-end-line="327" selection-end-column="69" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/psvrt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="221" column="39" lean-forward="false" selection-start-line="221" selection-start-column="39" selection-end-line="221" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SD/1/0/img/img.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -493,12 +453,75 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/SD/1/1/img/img.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SD/1/1/labels/mask_patch_1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SD/1/1/labels/mask.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SD/1/1/labels/mask_patch_2.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sep_patch_script.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/psvrt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3307">
+          <caret line="221" column="39" lean-forward="false" selection-start-line="221" selection-start-column="39" selection-end-line="221" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_accuracy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="284" column="0" lean-forward="false" selection-start-line="283" selection-start-column="0" selection-end-line="284" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SD/0/1/img/img.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gen_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="16" lean-forward="false" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+        <state relative-caret-position="430">
+          <caret line="101" column="0" lean-forward="true" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utility.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="327" column="26" lean-forward="false" selection-start-line="327" selection-start-column="26" selection-end-line="327" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
