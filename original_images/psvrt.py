@@ -168,8 +168,8 @@ class psvrt(feeders.Feeder):
         for i, (position, item) in enumerate(zip(positions_list, items_list)):
             square_size = items_list[i].shape
             image[position[0]:position[0] + square_size[0], position[1]:position[1] + square_size[1], :] = items_list[i].copy()
-            image[image == -1] = 0.
-            image[image == 1] = 255.
+            # image[image == -1] = 0.
+            # image[image == 1] = 255.
 
             if self.full_size == 1 or self.full_size == 2:
                 ground_label[position[0]:position[0] + square_size[0], position[1]:position[1] + square_size[1], :] = 1.
@@ -185,8 +185,8 @@ class psvrt(feeders.Feeder):
             for itm in itms_list[1:]:
                 cat_item = np.concatenate((np.squeeze(cat_item), np.squeeze(itm)), axis=0)
 
-            cat_item[cat_item == -1] = 0.
-            cat_item[cat_item == 1] = 255.
+            # cat_item[cat_item == -1] = 0.
+            # cat_item[cat_item == 1] = 255.
 
             ground_label_2 = cat_item
 
@@ -218,6 +218,8 @@ class psvrt(feeders.Feeder):
                 if not self.easy:
                     new_position = [np.random.randint(low=0, high=self.box_extent[0] - (self.item_size[0] - 1)),
                                     np.random.randint(low=0, high=self.box_extent[1] - (self.item_size[1] - 1))]
+
+                    # print(new_position)
                 else:
                     new_position = [np.random.randint(low=0, high=self.raw_input_size[0] / 20),
                                     np.random.randint(low=0, high=self.raw_input_size[1] / 20)]

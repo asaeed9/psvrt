@@ -325,6 +325,7 @@ def check_position_viability(new_position, old_position, SR_label, SR_portion, i
     # RESAMPLE IF NECESSARY
     viability = 1
     if SR_type == 'average_orientation' or SR_type == 'average_displacement':
+        # print('check position viability:', new_position, old_position)
         if ((np.abs(y_pos_1 - y_pos_2) <= item_size[0]) & (np.abs(x_pos_1 - x_pos_2) <= item_size[1])):
             viability = 0
     elif SR_type == 'all':
