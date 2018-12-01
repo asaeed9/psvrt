@@ -16,9 +16,8 @@ Data Configurations/Paths
 """
 img_dir_patch="./SD/predicted_patches"
 img_dir_orig = "./SD/original_images"
-img_dir="../../original_images/SD_Train"
+img_dir="../../original_images/SD"
 model50_SD = 'SD/50kSD_Model.ckpt'
-model50_local_top_1 = 'SD/50k_local_top_Model.ckpt'
 model50_left_mask = 'SD/50k_left_mask.ckpt'
 model50_right_mask = 'SD/50k_right_mask.ckpt'
 
@@ -28,17 +27,17 @@ img_type = "original"
 ##
 # Convolutional Layer 1.
 filter_size0 = 16          # Convolution filters are 4 x 4 pixels.
-num_filters0 = 16         # There are 16 of these filters.
+num_filters0 = 64         # There are 16 of these filters.
 
 filter_size1 = 8          # Convolution filters are 4 x 4 pixels.
-num_filters1 = 16         # There are 16 of these filters.
+num_filters1 = 64         # There are 16 of these filters.
 
 # Convolutional Layer 2.
 filter_size2 = 8          # Convolution filters are 2 x 2 pixels.
-num_filters2 = 16         # There are 32 of these filters.
+num_filters2 = 32         # There are 32 of these filters.
 
 filter_size3 = 8          # Convolution filters are 2 x 2 pixels.
-num_filters3 = 4         # There are 32 of these filters.
+num_filters3 = 32         # There are 32 of these filters.
 
 # Convolutional Layer 3.
 filter_size4 = 4          # Convolution filters are 2 x 2 pixels.
@@ -55,16 +54,15 @@ fc_size = 2000             # Number of neurons in fully-connected layer.
 # img_size = 8 * 4
 
 # Images are stored in one-dimensional arrays of this length.
-img_size_flat = 10 * 10
 
 # Number of colour channels for the images: 3 channel for RGB.
 num_channels = 3
 
 # Tuple with height and width of images used to reshape arrays.
-img_shape = (10, 10, num_channels)
+img_shape = (8, 8, num_channels)
 
 # Number of classes, one class for same or different image
-num_classes = 10*10
+num_classes = img_shape[0]*img_shape[1]
 orig_patch_size = (2, 2, 3)
 npatches = 1
 
@@ -77,6 +75,7 @@ def change_label_dimensions(labels):
             label_temp[idx][1] = 1
         else:
             label_temp[idx][0] = 1
+
     
     return label_temp
 
@@ -310,7 +309,6 @@ def optimize(num_epochs, save_model=True,save_name= "base_model",restore_model=F
     end_time = time.time()
     # Difference between start and end-times.
     time_dif = end_time - start_time
-
     # Print the time-usage.
     print("Time usage: " + str(timedelta(seconds=int(round(time_dif)))))  
     print(plot_accuracy)
@@ -372,8 +370,8 @@ def predict_nd_save(train, labels, img_type_lbl, img_key, start_idx):
 
 
 
-x = tf.placeholder(tf.float32, shape=[None, img_size_flat*num_channels], name='x')
-x_image = tf.reshape(x, [-1, 10, 10, num_channels])
+x = tf.placeholder(tf.float32, shape=[None, img_shape[0]*img_shape[1]*num_channels], name='x')
+x_image = tf.reshape(x, [-1, img_shape[0], img_shape[1], num_channels])
 y_true = tf.placeholder(tf.float32, shape=[None, num_classes], name='y_true')
 y_true_cls = tf.placeholder(tf.float32, shape=[None, num_classes], name='y_true_cls')
 
@@ -488,22 +486,23 @@ train_data, train_labels, img_type, img_keys = load_data(img_dir)
 session = tf.Session()
 init = tf.global_variables_initializer()
 session.run(init)
-train_labels_data = train_labels[:][:50000, 1]
+train_labels_data = train_labels[:][:10000, 2]#1=mask_patch_2,2=mask_patch_1
 #print(train_labels_data)
-train_orig_data = train_data[:50000]
-img_type = img_type[:50000]
-img_keys = img_keys[:50000]
+#sys.exit(0)
+train_orig_data = train_data[:10000]
+img_type = img_type[:10000]
+img_keys = img_keys[:10000]
 total_imgs = len(img_type)
-train_batch_size = 128
+train_batch_size = 32 
 
 
 """Main"""
 if __name__ == "__main__":
 
     save_model = True
-    save_name = model50_right_mask
+    save_name = model50_left_mask
     restore_model=False
-    restore_name=model50_right_mask
+    restore_name=model50_left_mask
 
-    optimize(30,
-    save_model=True,save_name=model50_right_mask,restore_model=restore_model,restore_name=model50_right_mask)
+    optimize(10,
+    save_model=True,save_name=model50_left_mask,restore_model=restore_model,restore_name=model50_left_mask)
