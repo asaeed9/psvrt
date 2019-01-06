@@ -5,8 +5,13 @@ import os
 import csv
 
 raw_input_size = [7,7,3] # Size of whole image
+<<<<<<< HEAD
 batch_size = 256 
 total_imgs = 1000
+=======
+batch_size = 100
+total_imgs = 100
+>>>>>>> e4f693f192807ab196ac4573e22c45f367a2d748
 
 total_iterations = 0
 start_ = 0

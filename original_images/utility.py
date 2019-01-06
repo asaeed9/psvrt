@@ -7,6 +7,8 @@ import webbrowser
 import shutil
 from tensorflow.python.client import device_lib
 import ipdb
+from functools import reduce
+from itertools import product
 
 
 def get_available_gpus():
@@ -311,6 +313,132 @@ def bad_catcher(rv, g, var_names):
 
     return [rv_nan_catcher, rv_inf_catcher, g_nan_catcher, g_inf_catcher, rv_nan_names, rv_inf_names, g_nan_names,
             g_inf_names]
+
+def rgb2grey(rgb):
+    return(np.dot(rgb[...,:3], [0.299, 0.587, 0.114]))
+
+def determine_quad(left_top_locations, mid_point):
+    box_1 = left_top_locations[0]
+    box_2 = left_top_locations[1]
+    box_quad = []
+    quad_dict = {}
+
+    for box in left_top_locations:
+        if box[1] <= mid_point[0] and box[0] <= mid_point[1]:  # both x and y are less than equal to the midpoint
+            #         print("Quadrant II")
+            box_quad.append(2)
+        elif box[1] <= mid_point[0] and box[0] > mid_point[
+            1]:  # x is less than equal to x of midpoint but y is greater than y of midpoint
+            #         print("Quadrant III")
+            box_quad.append(3)
+        elif box[1] > mid_point[0] and box[0] <= mid_point[
+            1]:  # x is greater than x of midpoint but y is less than equal to y of midpoint
+            #         print("Quadrant I")
+            box_quad.append(1)
+        elif box[1] > mid_point[0] and box[0] > mid_point[
+            1]:  # x is greater than x of midpoint and y is greater than  y of midpoint
+            #         print("Quadrant IV")
+            box_quad.append(4)
+
+            #     print('quadrant:', box_quad)
+    if box_quad[0] == box_quad[1]:
+        if abs(box_1[1] - box_2[1]) > abs(box_1[0] - box_2[0]):  # top/bottom case
+            if box_1[1] < box_2[1]:
+                quad_dict['left_box'] = box_1
+                quad_dict['right_box'] = box_2
+            else:
+                quad_dict['left_box'] = box_2
+                quad_dict['right_box'] = box_1
+
+        else:  # left/right case
+            if box_1[0] < box_2[0]:
+                quad_dict['top_box'] = box_1
+                quad_dict['bottom_box'] = box_2
+            else:
+                quad_dict['top_box'] = box_2
+                quad_dict['bottom_box'] = box_1
+
+    if (box_quad[0] == 2 and box_quad[1] == 1) or (box_quad[0] == 2 and box_quad[1] == 4) or (
+            box_quad[0] == 3 and box_quad[1] == 1) or (box_quad[0] == 3 and box_quad[1] == 4):
+        #     0 == Left and 1 == Right
+        #         print('Left box:', box_1)
+        #         print('Right box:', box_2)
+        quad_dict['left_box'] = box_1
+        quad_dict['right_box'] = box_2
+
+    if (box_quad[0] == 1 and box_quad[1] == 2) or (box_quad[0] == 4 and box_quad[1] == 2) or (
+            box_quad[0] == 1 and box_quad[1] == 3) or (box_quad[0] == 4 and box_quad[1] == 3):
+        #    1 == Left and 0 == Right
+        #         print('Left box:', box_2)
+        #         print('Right box:', box_1)
+        quad_dict['left_box'] = box_2
+        quad_dict['right_box'] = box_1
+
+    if (box_quad[0] == 1 and box_quad[1] == 4) or (box_quad[0] == 2 and box_quad[1] == 3):
+        #    0 == Top and 1 == Bottom
+        #         print('Top box:', box_1)
+        #         print('Bottom box:', box_2)
+        quad_dict['top_box'] = box_1
+        quad_dict['bottom_box'] = box_2
+
+    if (box_quad[0] == 4 and box_quad[1] == 1) or (box_quad[0] == 3 and box_quad[1] == 2):
+        #    1 == Top and 0 == Bottom
+        #         print('Top box:', box_2)
+        #         print('Bottom box:', box_1)
+        quad_dict['top_box'] = box_2
+        quad_dict['bottom_box'] = box_1
+
+    return quad_dict
+
+
+def get_patch_loc(img_dims, item_size, img):
+    img = np.squeeze(img)
+    img[np.where(img == 255)] = 1.
+    r = img_dims[0] - item_size[0] + 1
+    c = img_dims[1] - item_size[0] + 1
+    iter_o = np.array(list(product(range(0,item_size[0]), range(0,item_size[1]))))
+    left_corners = reduce(lambda x,y: np.multiply(x,y), map(lambda x, y: img[x:x+r, y:y+c], iter_o[:, 0], iter_o[:, 1]))
+    left_top_locations = np.transpose(np.where(left_corners > 0))
+    left_top_locations = np.array(left_top_locations, dtype=np.int32)
+    return left_top_locations
+
+def sep_boxes(img_dims, itm_size, nitems, labels, img_type_lbl):
+    left_mask = []
+    right_mask = []
+    mid_point = (img_dims[0]/2, img_dims[1]/2)
+    for index in range(0, len(labels)):
+        lbl_x = labels[index:index + 1, :]
+        img_type_x = img_type_lbl[index]
+        # img_key_x = img_key[index]
+
+        top_left_loc = get_patch_loc(img_dims, itm_size, lbl_x)
+        quad_dict = determine_quad(top_left_loc, mid_point)
+
+        mask_1 = np.zeros(img_dims[0]*img_dims[1])
+        mask_2 = np.zeros(img_dims[0]*img_dims[1])
+        mask_1 = np.reshape(mask_1, (img_dims[0], img_dims[1]))
+        mask_2 = np.reshape(mask_2, (img_dims[0], img_dims[1]))
+
+        if 'left_box' in quad_dict:
+            coords = quad_dict['left_box']
+            mask_1[coords[0]: coords[0] + itm_size[0], coords[1]: coords[1] + itm_size[0]] = 1.
+            coords = quad_dict['right_box']
+            mask_2[coords[0]:coords[0] + itm_size[0], coords[1]: coords[1] + itm_size[0]] = 1.
+        elif 'top_box' in quad_dict:
+            coords = quad_dict['top_box']
+            mask_1[coords[0]: coords[0] + itm_size[0], coords[1]: coords[1] + itm_size[0]] = 1.
+            coords = quad_dict['bottom_box']
+            mask_2[coords[0]:coords[0] + itm_size[0], coords[1]: coords[1] + itm_size[0]] = 1.
+
+        left_mask.append(np.squeeze(mask_1))
+        right_mask.append(np.squeeze(mask_2))
+        # plt.imsave(img_dir + str(img_key_x) + "/" + str(img_type_x) + '/labels/mask_patch_1.png',
+        #            np.squeeze(mask_1))
+        # plt.imsave(img_dir + str(img_key_x) + "/" + str(img_type_x) + '/labels/mask_patch_2.png',
+        #            np.squeeze(mask_2))
+
+    return np.array(left_mask), np.array(right_mask)
+
 
 
 def check_position_viability(new_position, old_position, SR_label, SR_portion, item_size, SR_type):

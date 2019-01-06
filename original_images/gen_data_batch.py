@@ -1,12 +1,17 @@
 import psvrt
 import numpy as np
+from utility import rgb2grey, sep_boxes
 
 #raw_input_size = [6,10,3] # Size of whole image
 batch_size = 2
 
-def generate_batch(batch_size, img_shape, itm_size, n_itms):
+def generate_batch(batch_size, img_shape, itm_size, n_itms, prob_type = 'SD'):
 	# Change `problem_type` to SR for spatial relation labels
+<<<<<<< HEAD
 	data_parameters = {'problem_type': 'SR',
+=======
+	data_parameters = {'problem_type': prob_type,
+>>>>>>> e4f693f192807ab196ac4573e22c45f367a2d748
 			   'item_size': [itm_size[0],itm_size[1]],
 			   'box_extent': [img_shape[0], img_shape[1]],
 			   'num_items': n_itms,
@@ -30,6 +35,7 @@ def generate_batch(batch_size, img_shape, itm_size, n_itms):
 
 	labels_temp = np.array(np.squeeze(labels[:, 0, 0, 0]), np.int64)
 	train_data = np.reshape(stimuli, [stimuli.shape[0], stimuli.shape[1] * stimuli.shape[2] * stimuli.shape[3]])
+	mask_labels = rgb2grey(np.array([items[0] for items in all_items]))
 
 	ret_lbls = np.zeros([batch_size, 2])
 	indices_1 = np.where(labels_temp == 1)
@@ -38,7 +44,18 @@ def generate_batch(batch_size, img_shape, itm_size, n_itms):
 	ret_lbls[indices_0] = [1,0]
 	ret_lbls[indices_1] = [0,1]
 
-	return train_data, ret_lbls
+	left_mask, right_mask = sep_boxes(img_shape, itm_size, n_itms, mask_labels, labels_temp)
+	left_mask = np.reshape(left_mask, [batch_size,img_shape[0] * img_shape[1]])
+	right_mask = np.reshape(right_mask, [batch_size, img_shape[0] * img_shape[1]])
 
+<<<<<<< HEAD
 # train_data, ret_lbls = generate_batch(64)
 # print(train_data.shape, ret_lbls.shape)
+=======
+	# print(ret_lbls.shape)
+
+	return train_data, mask_labels, left_mask, right_mask, ret_lbls
+
+
+# generate_batch(3, (60,60,3), (5,5), 2)
+>>>>>>> e4f693f192807ab196ac4573e22c45f367a2d748
