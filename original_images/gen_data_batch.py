@@ -1,12 +1,12 @@
 import psvrt
 import numpy as np
 
-raw_input_size = [10,10,3] # Size of whole image
+#raw_input_size = [6,10,3] # Size of whole image
 batch_size = 2
 
 def generate_batch(batch_size, img_shape, itm_size, n_itms):
 	# Change `problem_type` to SR for spatial relation labels
-	data_parameters = {'problem_type': 'SD',
+	data_parameters = {'problem_type': 'SR',
 			   'item_size': [itm_size[0],itm_size[1]],
 			   'box_extent': [img_shape[0], img_shape[1]],
 			   'num_items': n_itms,

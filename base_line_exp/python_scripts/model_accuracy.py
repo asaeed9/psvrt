@@ -54,16 +54,16 @@ fc_size = 2000             # Number of neurons in fully-connected layer.
 # img_size = 8 * 4
 
 # Images are stored in one-dimensional arrays of this length.
-img_size_flat = 128 * 128
+img_size_flat = 7 * 7
 
 # Number of colour channels for the images: 3 channel for RGB.
 num_channels = 3
 
 # Tuple with height and width of images used to reshape arrays.
-img_shape = (128, 128, num_channels)
+img_shape = (7, 7, num_channels)
 
 # Number of classes, one class for same or different image
-num_classes = 128*128
+num_classes = 7*7
 orig_patch_size = (2, 2, 3)
 lbl_patch_size = (2, 2)
 npatches = 1
@@ -285,9 +285,7 @@ def get_accuracy(nimgs, img_data_loc, lft_model, rght_model):
             len(train[0]), train, lft_labels, rght_labels, img_type_lbl, img_key)
         lft_preds = restore_see_layer(orig=x_orig_batch, model_name=lft_model, var_name='fc_3/fc4')
         rght_preds = restore_see_layer(orig=x_orig_batch, model_name=rght_model, var_name='fc_3/fc4')
-        rght_preds_w = restore_see_layer(orig=x_orig_batch,
-        model_name=rght_model, var_name='fc_2/fc3_W')
-        print(rght_preds_w)
+        print(rght_preds)
         lft_lbl_cds = get_coords(lft_true_batch, 1)
         rght_lbl_cds = get_coords(rght_true_batch, 1)
         lft_pred_cds = get_coords(lft_preds, 1)
@@ -335,7 +333,117 @@ def get_accuracy(nimgs, img_data_loc, lft_model, rght_model):
     return (cor_prd_imgs / total_imgs)
 
 
+def get_accuracy_debug(nimgs, img_data_loc, lft_model, rght_model):
+    train_data, train_labels, img_type, img_keys = load_data(img_data_loc)
+
+    if nimgs == -1:
+        nimgs = len(train_data[0, :])
+
+    train_orig_data = train_data[0, :nimgs]
+    total_imgs = len(train_orig_data)
+
+    print("Total Images:", total_imgs)
+
+    cor_prd_imgs = 0
+
+    #     if category == "both":
+    #         train_mask_labels = train_labels[:nimgs, 5]
+    train_lft_labels = train_labels[:nimgs, 2]  # 2=mask_patch_2, 1=mask_patch_1
+    train_rght_labels = train_labels[:nimgs, 1]
+
+#    print(train_lft_labels)
+#    print(train_rght_labels)
+    #     print(train_mask_labels)
+    #     train_patch_labels = train_labels[:nimgs, 0]
+    batch_s = 8 
+    total_iterations = 0
+    start_ = 0
+    end_ = batch_s
+    np.set_printoptions(suppress=True)
+
+    while True:
+        train = train_orig_data[start_:end_]
+        lft_labels = train_lft_labels[start_:end_]
+        rght_labels = train_rght_labels[start_:end_]
+
+        img_type_lbl = img_type[start_:end_]
+        img_key = img_keys[start_:end_]
+        dims = (batch_s, num_classes, num_channels)
+        train_lft, lft_labels, img_type_lbl_lft, img_key_lft = get_batch_images(train, train, lft_labels, img_type_lbl,
+                                                                                img_key, dims, True)
+        train, rght_labels, img_type_lbl, img_key = get_batch_images(train, train, rght_labels, img_type_lbl, img_key,
+                                                                     dims, True)
+
+        x_orig_batch, x_pred_batch, lft_true_batch, rght_true_batch, img_type_lbl, img_key = patch_next_batch(
+            len(train[0]), train, lft_labels, rght_labels, img_type_lbl, img_key)
+
+#        print(list(x_orig_batch))
+#        print(list(lft_true_batch))
+        lft_preds = restore_see_layer(orig=x_orig_batch, model_name=lft_model, var_name='fc_3/fc4')
+#        print(list(lft_preds))
+
+        rght_preds = restore_see_layer(orig=x_orig_batch, model_name=rght_model, var_name='fc_3/fc4')
+#        rght_preds_w = restore_see_layer(orig=x_orig_batch,
+#        model_name=rght_model, var_name='fc_2/fc3_W')
+#        print(list(rght_preds))
+        lft_lbl_cds = get_coords(lft_true_batch, 1)
+        rght_lbl_cds = get_coords(rght_true_batch, 1)
+        lft_pred_cds = get_coords(lft_preds, 1)
+        rght_pred_cds = get_coords(rght_preds, 1)
+#
+#        print(lft_lbl_cds)
+#        print("******left predicted")
+#        print(lft_pred_cds)
+#        print("******")
+#        print(rght_lbl_cds)
+#        print("******right predicted")
+#        print(rght_pred_cds)
+#
+        left_patch = extract_patch(lft_pred_cds, x_orig_batch)
+        right_patch = extract_patch(rght_pred_cds, x_orig_batch)
+
+#        print(list(left_patch))
+#        print(list(right_patch))
+#
+        cor_prd_imgs += np.sum(
+            [True for llc, lpc, rlc, rpc in zip(lft_lbl_cds, lft_pred_cds, rght_lbl_cds, rght_pred_cds) if
+             np.array_equal(llc, lpc) and np.array_equal(rlc, rpc)])
+
+        #         for img0,img_key_x in zip(x_orig_batch, img_key):
+        #             print('key:', img_key_x)
+        #             see_output(np.expand_dims(np.reshape(img0, [10,10,3]), axis=0))
+        #             see_output_grey(np.expand_dims(np.reshape(np.rint(img1), [10,10]), axis=0))
+        #             see_output_grey(np.expand_dims(np.reshape(np.rint(img2), [10,10]), axis=0))
+
+#        for lft, rght, img_key_x, img_type_x in zip(left_patch, right_patch, img_key, img_type_lbl):
+#            prediction = np.reshape(np.stack([lft, rght], axis=0), [1, 4, 2, 3])
+#            save_patch_images(prediction, img_type_x, img_key_x)
+        # see_output(np.reshape(np.stack([lft,rght], axis=0), [1,4,2,3]))
+        #             see_output(lft)
+        #             see_output(rght)
+
+
+        # do my stuff
+        if total_imgs <= start_ + len(train[0]):
+            total_iterations += len(train[0])
+            print("{} Image(s) have been processed.".format(total_iterations))
+            break
+
+        total_iterations += batch_s
+        start_ = end_
+        end_ = end_ + batch_s
+
+    return (cor_prd_imgs / total_imgs)
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     np.random.seed(100)
-    print(get_accuracy(256, "../../original_images/SD", model50_left_mask,
+    print(get_accuracy_debug(10000, "../../original_images/SD", model50_left_mask,
     model50_right_mask))

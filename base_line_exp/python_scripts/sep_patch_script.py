@@ -20,7 +20,7 @@ img_dir="../../original_images/SD/"
 
 
 # Images are stored in one-dimensional arrays of this length.
-img_dims = [8, 8]
+img_dims = [7, 7]
 
 patch_size = (2, 2)
 npatches = 2
@@ -68,23 +68,20 @@ def load_data(img_dir):
 
     return data_imgs, data_labels, data_same_diff, data_img_keys
 
-
-
-
-
 def get_batch_labels(label, same_diff, img_keys, grey_scale):
     list_of_labels = []
     list_of_same_diff = []
     list_of_img_keys = []
     for lbl, img_type, img_key in zip(label, same_diff, img_keys):
         orig_lbl = cv2.imread(lbl)
+#        print('orig_lbl:', orig_lbl)
         if orig_lbl is None:
             print("Unable to read label{}".format(lbl))
             continue
 
         if (grey_scale):
             orig_lbl = rgb2grey(orig_lbl)
-
+#        print('orig_lbl', orig_lbl)
         flattened_lbl = orig_lbl.flatten()
 
         if grey_scale:
@@ -178,6 +175,7 @@ def determine_quad(left_top_locations, mid_point):
 def get_patch_loc(img):
     img = np.squeeze(img)
     img[np.where(img == 255)] = 1.
+    print(img, img.shape)
     r = img_dims[0] - patch_size[0] + 1
     c = img_dims[1] - patch_size[0] + 1
 
@@ -185,6 +183,7 @@ def get_patch_loc(img):
     left_corners = reduce(lambda x,y: np.multiply(x,y), map(lambda x, y: img[x:x+r, y:y+c], iter_o[:, 0], iter_o[:, 1]))
     left_top_locations = np.transpose(np.where(left_corners == 1))
     left_top_locations = np.array(left_top_locations, dtype=np.int32)
+    print(left_top_locations)
     return left_top_locations
 
 def sep_boxes(labels, img_type_lbl, img_key, start_idx):
@@ -195,6 +194,7 @@ def sep_boxes(labels, img_type_lbl, img_key, start_idx):
         img_type_x = img_type_lbl[index]
         img_key_x = img_key[index]
         top_left_loc = get_patch_loc(lbl_x)
+        exit(0)
         quad_dict = determine_quad(top_left_loc, mid_point)
 
         mask_1 = np.zeros(img_dims[0]*img_dims[1])
@@ -228,7 +228,7 @@ if __name__ == "__main__":
     # train_prds = train_data[1, :]
     train_mask_labels = train_labels[:, 0]
 #    print(train_mask_labels)
-    batch_s = 64
+    batch_s = 2
     total_iterations = 0
     start_ = 0
     end_ = batch_s
@@ -240,9 +240,15 @@ if __name__ == "__main__":
         mask_lbls = train_mask_labels[start_:end_]
         img_type_lbl = img_type[start_:end_]
         img_key = img_keys[start_:end_]
-        labels, img_type_lbl, img_key = get_batch_labels(mask_lbls, img_type_lbl, img_key, True)
-        patch_images = sep_boxes(labels, img_type_lbl, img_key, start_)
+#        print(mask_lbls.shape)
+#        print(mask_lbls)
+#        print(img_type_lbl)
 
+        labels, img_type_lbl, img_key = get_batch_labels(mask_lbls, img_type_lbl, img_key, True)
+#        print('input to sep_boxes:', labels.shape)
+#        print('input to sep_boxes sample data:', labels[0])
+#        print(img_type_lbl.shape)
+        patch_images = sep_boxes(labels, img_type_lbl, img_key, start_)
         # do my stuff
         if len(train_mask_labels) < start_ + batch_s:
             print("{} Images have been processed.".format(total_iterations))
