@@ -7,11 +7,7 @@ batch_size = 2
 
 def generate_batch(batch_size, img_shape, itm_size, n_itms, prob_type = 'SD'):
 	# Change `problem_type` to SR for spatial relation labels
-<<<<<<< HEAD
-	data_parameters = {'problem_type': 'SR',
-=======
 	data_parameters = {'problem_type': prob_type,
->>>>>>> e4f693f192807ab196ac4573e22c45f367a2d748
 			   'item_size': [itm_size[0],itm_size[1]],
 			   'box_extent': [img_shape[0], img_shape[1]],
 			   'num_items': n_itms,
@@ -48,14 +44,8 @@ def generate_batch(batch_size, img_shape, itm_size, n_itms, prob_type = 'SD'):
 	left_mask = np.reshape(left_mask, [batch_size,img_shape[0] * img_shape[1]])
 	right_mask = np.reshape(right_mask, [batch_size, img_shape[0] * img_shape[1]])
 
-<<<<<<< HEAD
-# train_data, ret_lbls = generate_batch(64)
-# print(train_data.shape, ret_lbls.shape)
-=======
-	# print(ret_lbls.shape)
 
 	return train_data, mask_labels, left_mask, right_mask, ret_lbls
 
 
-# generate_batch(3, (60,60,3), (5,5), 2)
->>>>>>> e4f693f192807ab196ac4573e22c45f367a2d748
+generate_batch(3, (60,60,3), (5,5), 2)
