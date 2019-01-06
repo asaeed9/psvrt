@@ -270,5 +270,15 @@ if __name__ == "__main__":
     # total = len(ar1)
     #
     # print("Accuracy: ", tp/total)
+    np.set_printoptions(suppress=True)
+    ary = np.array([[0.5, 0.5],
+                    [0.00011721, 0.9998828 ],
+ [0.5,        0.5       ],
+ [0.54142386, 0.45857617],
+ [0.5,        0.5       ]])
 
-    get_accuracy(-1, "../../original_images/SD", model7m_sr)
+    pred_lbls = np.zeros(ary.shape)
+    pred_lbls[np.arange(ary.shape[0]), np.argmax(ary, axis=1)] = 1
+    print(pred_lbls)
+
+    # get_accuracy(-1, "../../original_images/SD", model7m_sr)

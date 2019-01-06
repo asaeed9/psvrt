@@ -5,9 +5,9 @@ from utility import rgb2grey, sep_boxes
 raw_input_size = [10,10,3] # Size of whole image
 batch_size = 2
 
-def generate_batch(batch_size, img_shape, itm_size, n_itms):
+def generate_batch(batch_size, img_shape, itm_size, n_itms, prob_type = 'SD'):
 	# Change `problem_type` to SR for spatial relation labels
-	data_parameters = {'problem_type': 'SD',
+	data_parameters = {'problem_type': prob_type,
 			   'item_size': [itm_size[0],itm_size[1]],
 			   'box_extent': [img_shape[0], img_shape[1]],
 			   'num_items': n_itms,
@@ -41,5 +41,12 @@ def generate_batch(batch_size, img_shape, itm_size, n_itms):
 	ret_lbls[indices_1] = [0,1]
 
 	left_mask, right_mask = sep_boxes(img_shape, itm_size, n_itms, mask_labels, labels_temp)
+	left_mask = np.reshape(left_mask, [batch_size,img_shape[0] * img_shape[1]])
+	right_mask = np.reshape(right_mask, [batch_size, img_shape[0] * img_shape[1]])
 
-	return train_data, mask_labels, left_mask, right_mask, labels_temp
+	# print(ret_lbls.shape)
+
+	return train_data, mask_labels, left_mask, right_mask, ret_lbls
+
+
+# generate_batch(3, (60,60,3), (5,5), 2)
