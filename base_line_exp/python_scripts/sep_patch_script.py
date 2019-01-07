@@ -17,50 +17,11 @@ from itertools import product
 Data Configurations/Paths
 """
 img_dir="../../original_images/SD/"
-img_lbls=""
-base_model = 'SD/sd_01_.ckpt'
-model_20000 = 'SD/sd_20000.ckpt'
-model_30000 = 'SD/sd_30000.ckpt'
-model_40000 = 'SD/sd_40000.ckpt'
-model_50000 = 'SD/sd_50000.ckpt'
-model2_50000 = 'SD/sd2_50000.ckpt'
 
-connected_model = 'SD/sd_conected.ckpt'
-
-##
-# Convolutional Layer 1.
-filter_size1 = 4          # Convolution filters are 4 x 4 pixels.
-num_filters1 = 16         # There are 16 of these filters.
-
-# Convolutional Layer 2.
-filter_size2 = 2          # Convolution filters are 2 x 2 pixels.
-num_filters2 = 32         # There are 32 of these filters.
-
-# Convolutional Layer 3.
-filter_size3 = 2          # Convolution filters are 2 x 2 pixels.
-num_filters3 = 64         # There are 64 of these filters.
-
-# Convolutional Layer 4.
-filter_size4 = 2          # Convolution filters are 2 x 2 pixels.
-num_filters4 = 128         # There are 128 of these filters.
-
-# Fully-connected layer.
-fc_size = 2000             # Number of neurons in fully-connected layer.
-
-# We know that images are 60 pixels in each dimension.
-# img_size = 8 * 4
 
 # Images are stored in one-dimensional arrays of this length.
-img_size_flat = 10 * 10
+img_dims = [7, 7]
 
-# Number of colour channels for the images: 3 channel for RGB.
-num_channels = 1
-
-# Tuple with height and width of images used to reshape arrays.
-img_shape = (10, 10, num_channels)
-
-# Number of classes, one class for same or different image
-num_classes = 4*2
 patch_size = (2, 2)
 npatches = 2
 
@@ -107,28 +68,25 @@ def load_data(img_dir):
 
     return data_imgs, data_labels, data_same_diff, data_img_keys
 
-
-
-
-
-def get_batch_labels(label, same_diff, img_keys, rshp, grey_scale):
+def get_batch_labels(label, same_diff, img_keys, grey_scale):
     list_of_labels = []
     list_of_same_diff = []
     list_of_img_keys = []
     for lbl, img_type, img_key in zip(label, same_diff, img_keys):
         orig_lbl = cv2.imread(lbl)
+#        print('orig_lbl:', orig_lbl)
         if orig_lbl is None:
             print("Unable to read label{}".format(lbl))
             continue
 
         if (grey_scale):
             orig_lbl = rgb2grey(orig_lbl)
-
+#        print('orig_lbl', orig_lbl)
         flattened_lbl = orig_lbl.flatten()
 
         if grey_scale:
 #            print(flattened_lbl.shape)
-            flattened_lbl = np.reshape(flattened_lbl, [10, 10])
+            flattened_lbl = np.reshape(flattened_lbl, img_dims)
 
         list_of_labels.append(np.asarray(flattened_lbl, dtype=np.float32))
         list_of_same_diff.append(img_type)
@@ -217,29 +175,32 @@ def determine_quad(left_top_locations, mid_point):
 def get_patch_loc(img):
     img = np.squeeze(img)
     img[np.where(img == 255)] = 1.
-    r = img_shape[0] - patch_size[0] + 1
-    c = img_shape[1] - patch_size[0] + 1
+    print(img, img.shape)
+    r = img_dims[0] - patch_size[0] + 1
+    c = img_dims[1] - patch_size[0] + 1
 
     iter_o = np.array(list(product(range(0,patch_size[0]), range(0,patch_size[1]))))
     left_corners = reduce(lambda x,y: np.multiply(x,y), map(lambda x, y: img[x:x+r, y:y+c], iter_o[:, 0], iter_o[:, 1]))
     left_top_locations = np.transpose(np.where(left_corners == 1))
     left_top_locations = np.array(left_top_locations, dtype=np.int32)
+    print(left_top_locations)
     return left_top_locations
 
 def sep_boxes(labels, img_type_lbl, img_key, start_idx):
     patched_images = []
-    mid_point = (4, 4)
+    mid_point = (img_dims[0]/2, img_dims[1]/2)
     for index in range(0, len(labels)):
         lbl_x = labels[index:index + 1, :]
         img_type_x = img_type_lbl[index]
         img_key_x = img_key[index]
         top_left_loc = get_patch_loc(lbl_x)
+        exit(0)
         quad_dict = determine_quad(top_left_loc, mid_point)
 
-        mask_1 = np.zeros(100)
-        mask_2 = np.zeros(100)
-        mask_1 = np.reshape(mask_1, [10, 10])
-        mask_2 = np.reshape(mask_2, [10, 10])
+        mask_1 = np.zeros(img_dims[0]*img_dims[1])
+        mask_2 = np.zeros(img_dims[0]*img_dims[1])
+        mask_1 = np.reshape(mask_1, img_dims)
+        mask_2 = np.reshape(mask_2, img_dims)
 
         if 'left_box' in quad_dict:
             coords = quad_dict['left_box']
@@ -267,7 +228,7 @@ if __name__ == "__main__":
     # train_prds = train_data[1, :]
     train_mask_labels = train_labels[:, 0]
 #    print(train_mask_labels)
-    batch_s = 64
+    batch_s = 2
     total_iterations = 0
     start_ = 0
     end_ = batch_s
@@ -279,10 +240,15 @@ if __name__ == "__main__":
         mask_lbls = train_mask_labels[start_:end_]
         img_type_lbl = img_type[start_:end_]
         img_key = img_keys[start_:end_]
-        dims = (batch_s, num_classes, num_channels)
-        labels, img_type_lbl, img_key = get_batch_labels(mask_lbls, img_type_lbl, img_key, dims, True)
-        patch_images = sep_boxes(labels, img_type_lbl, img_key, start_)
+#        print(mask_lbls.shape)
+#        print(mask_lbls)
+#        print(img_type_lbl)
 
+        labels, img_type_lbl, img_key = get_batch_labels(mask_lbls, img_type_lbl, img_key, True)
+#        print('input to sep_boxes:', labels.shape)
+#        print('input to sep_boxes sample data:', labels[0])
+#        print(img_type_lbl.shape)
+        patch_images = sep_boxes(labels, img_type_lbl, img_key, start_)
         # do my stuff
         if len(train_mask_labels) < start_ + batch_s:
             print("{} Images have been processed.".format(total_iterations))

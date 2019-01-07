@@ -37,8 +37,8 @@ while True:
     label_positions = data[2]
     all_items = np.asarray(data[3])
 
-    print('stimuli:', stimuli)
-    print('label: ', labels)
+#    print('stimuli:', stimuli)
+#    print('label: ', labels)
     labels_temp = np.array(np.squeeze(labels[:, 0, 0, 0]), np.int64)
 
     # print(len(stimuli), len(all_items), len(labels), len(label_positions))
@@ -67,6 +67,7 @@ while True:
         elif data_parameters['full_size'] == 0:
             plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/merged_patch.png', np.squeeze(items))
         else:
+            print(np.squeeze(items)[0])
             plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/mask.png', np.squeeze(items)[0])
             plt.imsave('./SD/' + str(count) + '/' + str(lbl) + '/labels/merged_patch.png', np.squeeze(items)[1])
 
