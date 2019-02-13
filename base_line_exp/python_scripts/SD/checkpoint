@@ -1,2 +1,2 @@
-model_checkpoint_path: "model_mask_sd.ckpt"
-all_model_checkpoint_paths: "model_mask_sd.ckpt"
+model_checkpoint_path: "single_patch_model.ckpt"
+all_model_checkpoint_paths: "single_patch_model.ckpt"
